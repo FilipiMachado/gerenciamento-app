@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Gerenciamento Pessoal
 
 WebApp de gerenciamento pessoal com foco em Mobile First, desenvolvido com Next.js, Tailwind CSS e Supabase.
@@ -6,7 +5,7 @@ WebApp de gerenciamento pessoal com foco em Mobile First, desenvolvido com Next.
 ## Funcionalidades
 
 - **Lista de Compras**: Gerenciamento dinâmico de itens com valores estimados, checkbox para marcar como comprado, edição e exclusão
-- **Controle Financeiro**: Painel de limites mensais (Crédito, Vale Filipi, Vale Vitória) com cálculo de saldos restantes em tempo real
+- **Controle Financeiro**: Painel de limites mensais (Crédito e Vales) com cálculo de saldos restantes em tempo real
 - **Histórico e Relatórios**: Visualização de despesas por mês/ano com resumos e destaque do dia de maior gasto
 
 ## Stack Tecnológico
@@ -78,6 +77,3 @@ src/
 1. Conecte o repositório ao Vercel
 2. Adicione as variáveis de ambiente nas configurações do projeto
 3. Deploy automático ao fazer push para a branch principal
-=======
-# gerenciamento-app
->>>>>>> f715f2f878ea6f54fdc8645036fc68c6e79a5972
