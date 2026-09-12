@@ -1,0 +1,29 @@
+# Icons para PWA
+
+Para o PWA funcionar corretamente, você precisa adicionar os seguintes arquivos de ícone na pasta `public/`:
+
+1. **icon-192.png** - Ícone de 192x192 pixels
+2. **icon-512.png** - Ícone de 512x512 pixels
+
+## Como criar os ícones:
+
+### Opção 1: Usar um gerador online
+1. Acesse https://realfavicongenerator.net/
+2. Faça upload de uma imagem (logo, ícone, etc)
+3. Baixe os ícones nas dimensões 192x192 e 512x512
+4. Renomeie para icon-192.png e icon-512.png
+5. Coloque na pasta `public/` do projeto
+
+### Opção 2: Usar ferramentas de design
+- Figma, Canva, Photoshop, GIMP, etc
+- Crie um quadrado de 192x192 pixels
+- Exporte como PNG
+- Repita o processo para 512x512 pixels
+
+### Opção 3: Usar ícones temporários (para teste)
+Enquanto não tiver os ícones finais, pode usar qualquer imagem PNG como placeholder.
+
+## Importante
+- Use formato PNG com transparência se possível
+- Mantenha o design simples e legível em pequenas dimensões
+- Use cores que combinem com o tema do app (indigo/azul)
