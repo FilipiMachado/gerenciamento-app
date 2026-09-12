@@ -77,6 +77,3 @@ src/
 1. Conecte o repositório ao Vercel
 2. Adicione as variáveis de ambiente nas configurações do projeto
 3. Deploy automático ao fazer push para a branch principal
-=======
-# gerenciamento-app
->>>>>>> f715f2f878ea6f54fdc8645036fc68c6e79a5972
