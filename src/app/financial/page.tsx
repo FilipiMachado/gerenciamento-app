@@ -35,6 +35,11 @@ export default function FinancialPage() {
   }, [])
 
   const fetchData = async () => {
+    if (!supabase) {
+      router.push('/login')
+      return
+    }
+
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) {
       router.push('/login')
@@ -44,7 +49,7 @@ export default function FinancialPage() {
     console.log('Buscando limites para:', { user_id: session.user.id, month: currentMonth, year: currentYear })
 
     // Buscar limites do mês atual (sem .single() para evitar erro quando não existe)
-    const { data: limitsData, error: limitsError } = await supabase
+    const { data: limitsData, error: limitsError } = await supabase!
       .from('financial_limits')
       .select('*')
       .eq('user_id', session.user.id)
@@ -56,7 +61,7 @@ export default function FinancialPage() {
     if (limitsError || !limitsData || limitsData.length === 0) {
       console.log('Criando novos limites padrão')
       // Criar limites padrão se não existirem
-      const { data: newLimits, error: createError } = await supabase
+      const { data: newLimits, error: createError } = await supabase!
         .from('financial_limits')
         .insert({
           user_id: session.user.id,
@@ -92,7 +97,7 @@ export default function FinancialPage() {
 
     // Buscar despesas
     const lastDayOfMonth = new Date(currentYear, currentMonth, 0).getDate()
-    const { data: expensesData, error: expensesError } = await supabase
+    const { data: expensesData, error: expensesError } = await supabase!
       .from('expenses')
       .select('*')
       .eq('user_id', session.user.id)
@@ -110,7 +115,12 @@ export default function FinancialPage() {
   }
 
   const handleUpdateLimits = async () => {
-    const { data: { session } } = await supabase.auth.getSession()
+    if (!supabase) {
+      alert('Erro: Supabase não configurado')
+      return
+    }
+
+    const { data: { session } } = await supabase!.auth.getSession()
     if (!session) {
       alert('Erro: Sessão não encontrada')
       return
@@ -122,7 +132,7 @@ export default function FinancialPage() {
     // Primeiro tenta atualizar se já existir
     if (limits) {
       console.log('Atualizando limites existentes, ID:', limits.id)
-      const { error } = await supabase
+      const { error } = await supabase!
         .from('financial_limits')
         .update({
           credit_limit: tempLimits.credit_limit,
@@ -142,7 +152,7 @@ export default function FinancialPage() {
     } else {
       // Se não existir, cria novos limites
       console.log('Criando novos limites')
-      const { data: newLimits, error: createError } = await supabase
+      const { data: newLimits, error: createError } = await supabase!
         .from('financial_limits')
         .insert({
           user_id: session.user.id,
@@ -170,10 +180,12 @@ export default function FinancialPage() {
   const handleAddExpense = async () => {
     if (!newExpense.description.trim() || newExpense.amount <= 0) return
 
-    const { data: { session } } = await supabase.auth.getSession()
+    if (!supabase) return
+
+    const { data: { session } } = await supabase!.auth.getSession()
     if (!session) return
 
-    const { error } = await supabase
+    const { error } = await supabase!
       .from('expenses')
       .insert({
         user_id: session.user.id,
@@ -202,7 +214,9 @@ export default function FinancialPage() {
   const handleDeleteExpense = async (id: string) => {
     if (!confirm('Tem certeza que deseja deletar esta despesa?')) return
 
-    const { error } = await supabase
+    if (!supabase) return
+
+    const { error } = await supabase!
       .from('expenses')
       .delete()
       .eq('id', id)
@@ -217,6 +231,8 @@ export default function FinancialPage() {
   const handleUpdateExpense = async (id: string) => {
     const expense = expenses.find(e => e.id === id)
     if (!expense || !expense.description.trim() || expense.amount <= 0) return
+
+    if (!supabase) return
 
     const { error } = await supabase
       .from('expenses')

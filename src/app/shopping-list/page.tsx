@@ -71,6 +71,8 @@ export default function ShoppingListPage() {
 
   // Sync offline items to Supabase
   const syncOfflineItems = async () => {
+    if (!supabase) return
+
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return
 
@@ -79,7 +81,7 @@ export default function ShoppingListPage() {
 
       for (const item of pendingItems) {
         if (item.pendingAction === 'create') {
-          const { error } = await supabase
+          const { error } = await supabase!
             .from('shopping_list')
             .insert({
               user_id: session.user.id,
@@ -93,7 +95,7 @@ export default function ShoppingListPage() {
             await IndexedDB.markItemAsSynced(item.id)
           }
         } else if (item.pendingAction === 'update') {
-          const { error } = await supabase
+          const { error } = await supabase!
             .from('shopping_list')
             .update({
               item_name: item.item_name,
@@ -107,7 +109,7 @@ export default function ShoppingListPage() {
             await IndexedDB.markItemAsSynced(item.id)
           }
         } else if (item.pendingAction === 'delete' && item.id) {
-          const { error } = await supabase
+          const { error } = await supabase!
             .from('shopping_list')
             .delete()
             .eq('id', item.id)
@@ -172,6 +174,16 @@ export default function ShoppingListPage() {
 
   // Busca itens do Supabase
   const fetchItems = async () => {
+    if (!supabase) {
+      router.push('/login')
+      return
+    }
+
+    if (!supabase) {
+      router.push('/login')
+      return
+    }
+
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) {
       router.push('/login')
@@ -179,7 +191,7 @@ export default function ShoppingListPage() {
     }
 
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabase!
         .from('shopping_list')
         .select('*')
         .eq('user_id', session.user.id)
@@ -223,6 +235,8 @@ export default function ShoppingListPage() {
     const isDuplicate = checkForDuplicates(newItem.item_name)
     if (isDuplicate && !confirmDuplicate(newItem.item_name, 'add')) return
 
+    if (!supabase) return
+
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return
 
@@ -251,7 +265,7 @@ export default function ShoppingListPage() {
       return
     }
 
-    const { error } = await supabase
+    const { error } = await supabase!
       .from('shopping_list')
       .insert(newItemData)
 
@@ -285,7 +299,7 @@ export default function ShoppingListPage() {
       return
     }
 
-    const { error } = await supabase
+    const { error } = await supabase!
       .from('shopping_list')
       .update({ is_purchased: !isPurchased })
       .eq('id', id)
@@ -319,7 +333,7 @@ export default function ShoppingListPage() {
       return
     }
 
-    const { error } = await supabase
+    const { error } = await supabase!
       .from('shopping_list')
       .delete()
       .eq('id', id)
@@ -357,7 +371,7 @@ export default function ShoppingListPage() {
       return
     }
 
-    const { error } = await supabase
+    const { error } = await supabase!
       .from('shopping_list')
       .update({
         item_name: item.item_name.trim(),
@@ -380,10 +394,12 @@ export default function ShoppingListPage() {
   const handleClearList = async () => {
     if (!confirm('Tem certeza que deseja limpar toda a lista?')) return
 
+    if (!supabase) return
+
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) return
 
-    const { error } = await supabase
+    const { error } = await supabase!
       .from('shopping_list')
       .delete()
       .eq('user_id', session.user.id)

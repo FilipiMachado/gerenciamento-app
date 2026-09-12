@@ -16,8 +16,13 @@ export default function DashboardPage() {
   }, [])
 
   const checkAuthorization = async () => {
+    if (!supabase) {
+      router.push('/login')
+      return
+    }
+
     const { data: { session } } = await supabase.auth.getSession()
-    
+
     if (!session) {
       router.push('/login')
       return
@@ -26,7 +31,7 @@ export default function DashboardPage() {
     setUserEmail(session.user.email || '')
 
     // Verificar whitelist
-    const { data: allowedUser, error } = await supabase
+    const { data: allowedUser, error } = await supabase!
       .from('allowed_users')
       .select('*')
       .eq('email', session.user.email)
@@ -44,7 +49,12 @@ export default function DashboardPage() {
   }
 
   const handleLogout = async () => {
-    await supabase.auth.signOut()
+    if (!supabase) {
+      router.push('/login')
+      return
+    }
+
+    await supabase!.auth.signOut()
     router.push('/login')
   }
 

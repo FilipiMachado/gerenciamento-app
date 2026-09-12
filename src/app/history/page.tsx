@@ -25,6 +25,16 @@ export default function HistoryPage() {
   }, [selectedMonth, selectedYear])
 
   const fetchExpenses = async () => {
+    if (!supabase) {
+      router.push('/login')
+      return
+    }
+
+    if (!supabase) {
+      router.push('/login')
+      return
+    }
+
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) {
       router.push('/login')
@@ -34,7 +44,7 @@ export default function HistoryPage() {
     const startDate = `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-01`
     const endDate = `${selectedYear}-${String(selectedMonth + 2).padStart(2, '0')}-01`
 
-    const { data, error } = await supabase
+    const { data, error } = await supabase!
       .from('expenses')
       .select('*')
       .eq('user_id', session.user.id)

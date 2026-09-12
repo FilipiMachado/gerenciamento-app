@@ -13,11 +13,17 @@ export default function AuthCallback() {
 
   const handleCallback = async () => {
     try {
+      if (!supabase) {
+        console.error('Supabase não configurado')
+        router.push('/login')
+        return
+      }
+
       // Wait for Supabase to handle the OAuth callback
       await new Promise(resolve => setTimeout(resolve, 500))
-      
-      const { data: { session }, error } = await supabase.auth.getSession()
-      
+
+      const { data: { session }, error } = await supabase!.auth.getSession()
+
       if (error) {
         console.error('Erro no callback:', error)
         router.push('/login')

@@ -5,7 +5,12 @@ import { LogIn } from 'lucide-react'
 
 export default function LoginPage() {
   const handleGoogleLogin = async () => {
-    await supabase.auth.signInWithOAuth({
+    if (!supabase) {
+      alert('Erro: Supabase não configurado. Verifique as variáveis de ambiente.')
+      return
+    }
+
+    await supabase!.auth.signInWithOAuth({
       provider: 'google',
       options: {
         redirectTo: `${window.location.origin}/auth/callback`
